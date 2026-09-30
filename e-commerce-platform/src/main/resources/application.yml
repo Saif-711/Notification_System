@@ -4,18 +4,18 @@ server:
 spring:
   application:
     name: ecommerce-platform
-  
+
   datasource:
     url: jdbc:h2:mem:ecommerce
     driver-class-name: org.h2.Driver
     username: sa
     password:
-  
+
   h2:
     console:
       enabled: true
       path: /h2-console
-  
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -24,8 +24,15 @@ spring:
       hibernate:
         format_sql: true
 
+logging:
+  file:
+    name: logs/ecommerce-platform.log
+  level:
+    com.ecommerce.platform: DEBUG
+    org.springframework.retry: DEBUG
+
 # Notification System Integration
 notification:
   service:
-    url: http://localhost:8082
+    url: http://localhost:8090
     endpoint: /notifications

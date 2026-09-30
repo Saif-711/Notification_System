@@ -41,7 +41,8 @@ public class NotificationClient {
     @Retryable(
             value = {RestClientException.class},
             maxAttempts = 3,
-            backoff = @Backoff(delay = 1000)
+            backoff = @Backoff(delay = 1000),
+            recover = "sendNotificationRecovery"
     )
     public void sendNotification(Long userId, NotificationChannel channel, String message, LocalDateTime scheduledAt) {
         NotificationRequest request = new NotificationRequest();
@@ -71,5 +72,11 @@ public class NotificationClient {
             log.error("Failed to send notification to Notification System", e);
             // Don't throw - we don't want to break e-commerce flow if notification fails
         }
+    }
+
+    private void sendNotificationRecovery(Long userId, NotificationChannel channel, String message, LocalDateTime scheduledAt, RestClientException e) {
+        log.error("Failed to send notification after 3 retry attempts: userId={}, channel={}, error={}",
+                userId, channel, e.getMessage());
+        // Could queue the notification for later processing here
     }
 }

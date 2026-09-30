@@ -1,9 +1,10 @@
 package com.ecommerce.platform.dto;
 
-import com.ecommerce.platform.dto.NotificationChannel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NotificationRequest {
 
-    @NotNull
+    @NotNull(message = "User ID cannot be null")
+    @Positive(message = "User ID must be a positive number")
     private Long userId;
 
-    @NotNull
+    @NotNull(message = "Channel cannot be null")
     private NotificationChannel channel;
 
-    @NotBlank
+    @NotBlank(message = "Message cannot be null or empty")
     private String message;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Future(message = "Scheduled time must be in the future")
     private LocalDateTime scheduledAt;
 }
